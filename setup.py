@@ -17,19 +17,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from glob import glob
-import re
 from setuptools import setup
 
-def load_version(filename='netsink/version.py'):
-    "Parse a __version__ number from a source file"
-    with open(filename) as source:
-        text = source.read()
-        match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]", text)
-        if not match:
-            msg = "Unable to find version number in {}".format(filename)
-            raise RuntimeError(msg)
-        version = match.group(1)
-        return version
+def load_version():
+    "Returns the current project version"
+    from netsink import version
+    return version.__version__
 
 setup(
     name="netsink",
