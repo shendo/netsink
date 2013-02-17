@@ -30,9 +30,9 @@ Goals
 
 The primary project goals are:
 
-* Simply to get malware to talk.  ``netsink`` is just there to provide communication end points.
+* Provide malware with communication end points to assist execution and elicit network traffic.
 * Straight-forward installation/deployment.  Should work out-of-the-box for most scenarios.
-* Easy configuration and extension.  Adding custom port ranges and protocols should be as simple as possible.
+* Easy configuration and extension.  Adding custom port ranges and services should be as simple as possible.
 
 Features
 --------
@@ -48,8 +48,7 @@ Planned Additions:
 * Internal DHCP server to auto configure clients
 * Automatic connection redirection for platforms that support ``iptables``
 * Expand available fake services to include IRC, SMTP, FTP, etc.
-* Easy hook points for setting up fake C2 servers for known implant families
-* A lot better documentation than this :)
+* Better documentation
 
 Issues
 ------
