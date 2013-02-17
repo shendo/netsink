@@ -55,6 +55,10 @@ def startlisteners(config):
         if x.ports:
             log.info("Listener '%s' awaiting %s activity on port/s %s", 
                          x.name, x.socktype, str(x.ports))
+
+def wait():
+    """Block indefinitely.
+    """
     log.info("Waiting...")
     while True:
         time.sleep(1)
@@ -63,3 +67,5 @@ if __name__ == '__main__':
     initlogging()
     log.setLevel(logging.DEBUG)
     startlisteners(Config())
+    wait()
+    
