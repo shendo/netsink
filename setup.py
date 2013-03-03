@@ -34,6 +34,8 @@ setup(
     url="",
     description="Network Sinkhole for Isolated Malware Analysis",
     long_description=open('README.rst').read(),
+    entry_points={"console_scripts": ['netsink = netsink.start:main']
+          },
     data_files=[("data", glob("data/*")),
                 ("conf", glob("conf/*"))],
     license="GPL",

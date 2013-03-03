@@ -17,6 +17,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
+import socket
+import sys
 import threading
 import time
 
@@ -44,28 +46,37 @@ def startlisteners(config):
             continue
         x.servers = []
         for p in x.ports:
-            server = Listener(x.name, p, registry[x.module], x.socktype, x.config).server
-            if server:
+            try:
+                server = Listener(x.name, p, registry[x.module], x.socktype, x.config).server
                 x.servers.append(server)
                 server_thread = threading.Thread(target=server.serve_forever)
                 server_thread.setDaemon(True)
                 server_thread.start()
-            else:
-                x.ports.pop(p)
+            except socket.error:
+                log.warning("Unable to establish listener on port %s... skipping.", p)
+                x.ports.remove(p)
         if x.ports:
             log.info("Listener '%s' awaiting %s activity on port/s %s", 
                          x.name, x.socktype, str(x.ports))
 
 def wait():
-    """Block indefinitely.
+    """Block indefinitely until Ctrl-C.
     """
     log.info("Waiting...")
     while True:
-        time.sleep(1)
-            
-if __name__ == '__main__':
+        try:
+            time.sleep(1)
+        except KeyboardInterrupt:
+            sys.exit()
+
+def main():
+    """Script entry point.
+    """
     initlogging()
     log.setLevel(logging.DEBUG)
     startlisteners(Config())
     wait()
+    
+if __name__ == '__main__':
+    main()
     

@@ -12,18 +12,44 @@ Internet connection.
 
 Getting Started
 ---------------
+Install using ``pip``: ::
+    pip install netsink
 
-Deployment architecture is very flexible and depends on current analysis tools/environment.
-As an example, we deploy netsink within our virtualised, automatic dynamic analysis sandboxes,
-as a dedicated virtual machine sharing the same virtual network as the clients.  
+Start the ``netsink`` listeners with the default configuration: ::
+    netsink
 
-* Create a virtual machine on your analysis network
-* Install your favourite flavour of Linux
-* Set the interface (on the shared virtual network as your guests) with a static IP
-* Install the latest ``netsink`` package
-* run ``start.py``
-* Either configure dhcpd on your netsink host (and set clients to obtain IP automatically) or set the DNS/gateway address on your clients to the netsink IP statically.
-* Test by trying to web browse to www.google.com on a client, you should instead see a dummy netsink webpage
+You should see output similar to the following, showing the bound ports: ::
+    2013-03-03 21:01:02,710 [netsink] INFO: Listener 'http' awaiting TCP activity on port/s [80, 8000, 8080, 8090]
+    2013-03-03 21:01:02,717 [netsink] INFO: Listener 'https' awaiting SSL activity on port/s [443, 8443]
+    2013-03-03 21:01:02,726 [netsink] INFO: Listener 'dns' awaiting UDP activity on port/s [53]
+    2013-03-03 21:01:02,726 [netsink] INFO: Waiting...
+
+To test, open a browser on the same host and navigate to https://127.0.0.1/testing and 
+you should see a netsink response page.
+
+Client Setup
+------------
+To be useful a client machine must be forced to redirect their traffic to the services
+on the ``netsink`` host.  This can be achieved in several ways.
+
+* Static DNS Configuration.  ``netsink`` includes a DNS server that will advertise
+itself as the destination for any client DNS requests (or as otherwise configured).  
+Change the client's network interface to use the ``netsink`` host's address as its 
+DNS server.
+
+* DHCP Configuration.  Not currently provided by the ``netsink`` package, however, if
+installing on a unix/linux platform, using the operating system's DHCP server package
+can be effective (for example ``isc-dhcp-server`` on ubuntu).  Set the ``netsink`` host's
+as the address to be returned for DNS and Default Gateway to the clients.  Set the client's
+network interface to obtain an address automatically.
+
+To test, ensure that any changes have been applied to the client's network interface.
+On Windows, in a command window: ::
+ ipconfig /all
+
+The ``netsink`` host's address should be listed as the DNS server on the applicable network 
+interface.  Now open a web browser on the client and navigate to www.google.com  you 
+should instead see the netsink response page and the DNS/HTTP requests logged on the server.
 
 Goals
 -----
