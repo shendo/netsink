@@ -22,35 +22,38 @@ import urllib2
 from dnslib import DNSRecord, DNSQuestion
 
 from netsink.config import Config
-import start
+import netsink.start as netsink
+
+REPEATS = 10000
+FEEDBACK = 1000
 
 if __name__ == '__main__':
     print "Netsink smoke test"
     print "------------------"
-    start.startlisteners(Config())
+    netsink.startlisteners(Config())
     
     print "+ 10,000 dns lookups (sequential) ",
     localaddress = socket.gethostbyname(socket.gethostname())
-    for x in range(10000):
+    for x in range(REPEATS):
         resp = DNSRecord(q=DNSQuestion("google.com")).send("127.0.0.1")
         assert str(resp.get_a().rdata) == localaddress
-        if not x % 1000:
+        if not x % FEEDBACK:
             print ".",
     print "[OK]"
         
     print "+ 10,000 http requests (sequential) ",
-    for x in range(10000):
+    for x in range(REPEATS):
         resp = urllib2.urlopen("http://127.0.0.1/anything").read()
         assert "Netsink" in resp
-        if not x % 1000:
+        if not x % FEEDBACK:
             print ".",
     print "[OK]"
     
     print "+ 10,000 https requests (sequential) ",
-    for x in range(10000):
+    for x in range(REPEATS):
         resp = urllib2.urlopen("https://127.0.0.1/anything/else").read()
         assert "Netsink" in resp
-        if not x % 1000:
+        if not x % FEEDBACK:
             print ".",
     print "[OK]"
     
