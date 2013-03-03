@@ -16,9 +16,10 @@ Install using ``pip``: ::
 
 	pip install netsink
 
-Start the ``netsink`` listeners with the default configuration: ::
+Start the ``netsink`` listeners with the default configuration 
+(you will need administrator/root access to bind to privilleged ports): ::
 
-	netsink
+	sudo netsink
 
 You should see output similar to the following, showing the bound ports: ::
 
