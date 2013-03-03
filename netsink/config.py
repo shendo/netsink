@@ -20,7 +20,7 @@ import os
 from pkg_resources import DistributionNotFound, Requirement, ResourceManager
 
 # path to conf files if package not installed
-SOURCE_PATH = os.path.join(os.path.dirname(__file__), '..', 'conf')
+SOURCE_PATH = os.path.join(os.path.dirname(__file__), 'conf')
 
 def installed_location(filename):
     """Returns the full path for the given installed file or None if not found.

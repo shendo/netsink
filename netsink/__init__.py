@@ -17,8 +17,8 @@
 import os
 from pkg_resources import DistributionNotFound, ResourceManager, Requirement
 
-# path to data files if package not intsalled
-SOURCE_PATH = os.path.join(os.path.dirname(__file__), '..', 'data')
+# path to data files if package not installed
+SOURCE_PATH = os.path.join(os.path.dirname(__file__), 'data')
 
 def get_data_file(filename):
     """Return full path to specified data file or None if not found.

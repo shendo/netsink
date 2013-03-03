@@ -16,7 +16,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from glob import glob
 from setuptools import setup
 
 def load_version():
@@ -31,13 +30,12 @@ setup(
     zip_safe=False,
     author="Steve Henderson",
     author_email="steve.henderson@hendotech.com.au",
-    url="",
+    url="https://github.com/shendo/netsink",
     description="Network Sinkhole for Isolated Malware Analysis",
     long_description=open('README.rst').read(),
     entry_points={"console_scripts": ['netsink = netsink.start:main']
           },
-    data_files=[("data", glob("data/*")),
-                ("conf", glob("conf/*"))],
+    include_package_data=True,
     license="GPL",
     install_requires = ['dnslib>=0.8'],
     classifiers = [
