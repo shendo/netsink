@@ -17,8 +17,10 @@
 # TODO dynamic importing and allow user extensions, etc.
 from netsink.modules.dns import DNSHandler
 from netsink.modules.http import HTTPHandler
+from netsink.modules.smtp import SMTPHandler
 
 # Mapping of known module names -> Handler class
 registry = {'dns': DNSHandler,
             'http': HTTPHandler,
+            'smtp': SMTPHandler,
             }

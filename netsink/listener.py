@@ -41,7 +41,7 @@ class Listener(object):
         elif socktype.upper() == 'SSL':
             if not get_data_file(globalconf.certfile) or not get_data_file(globalconf.keyfile):
                 log.warn("Cannot find certfile: %s or keyfile: %s for ssl", 
-                         config.certfile, config.keyfile)
+                         globalconf.certfile, globalconf.keyfile)
             else:
                 self.server = SocketServer.TCPServer(('', port), handler)
                 self.server.socket = ssl.wrap_socket(self.server.socket, 
