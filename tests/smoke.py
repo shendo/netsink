@@ -16,6 +16,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import email.utils
+from email.mime.text import MIMEText
+import smtplib
 import socket
 import urllib2
 
@@ -24,37 +27,52 @@ from dnslib import DNSRecord, DNSQuestion
 from netsink.config import Config
 import netsink.start as netsink
 
-REPEATS = 10000
-FEEDBACK = 1000
+LOCALADDR = socket.gethostbyname(socket.gethostname())
 
+def runtest(testfunc, desc, repeats):
+    """Execute the defined no args testfunc, 'repeats' number of times."""
+    print "+ %i %s (sequential)" % (repeats, desc),
+    for x in range(repeats):
+        testfunc()
+        if not x % (repeats / 10):
+            print ".",
+    print "[OK]"
+    
+def dns():
+    resp = DNSRecord(q=DNSQuestion("google.com")).send("127.0.0.1")
+    assert str(resp.get_a().rdata) == LOCALADDR
+
+def http():
+    resp = urllib2.urlopen("http://127.0.0.1/anything").read()
+    assert "Netsink" in resp
+
+def https():
+    resp = urllib2.urlopen("https://127.0.0.1/anything/else").read()
+    assert "Netsink" in resp
+
+def smtp():
+    msg = MIMEText('Message Body')
+    msg['To'] = email.utils.formataddr(('Recipient', 'netsink@example.com'))
+    msg['From'] = email.utils.formataddr(('Author', 'test@example.com'))
+    msg['Subject'] = 'Netsink Test Message'
+    server = smtplib.SMTP('127.0.0.1', 25)
+    #server.set_debuglevel(True)
+    try:
+        server.sendmail('test@example.com', 
+                        ['netsink@example.com'], 
+                        msg.as_string())
+    finally:
+        server.quit()
+        
 if __name__ == '__main__':
     print "Netsink smoke test"
     print "------------------"
     netsink.startlisteners(Config())
     
-    print "+ 10,000 dns lookups (sequential) ",
-    localaddress = socket.gethostbyname(socket.gethostname())
-    for x in range(REPEATS):
-        resp = DNSRecord(q=DNSQuestion("google.com")).send("127.0.0.1")
-        assert str(resp.get_a().rdata) == localaddress
-        if not x % FEEDBACK:
-            print ".",
-    print "[OK]"
-        
-    print "+ 10,000 http requests (sequential) ",
-    for x in range(REPEATS):
-        resp = urllib2.urlopen("http://127.0.0.1/anything").read()
-        assert "Netsink" in resp
-        if not x % FEEDBACK:
-            print ".",
-    print "[OK]"
-    
-    print "+ 10,000 https requests (sequential) ",
-    for x in range(REPEATS):
-        resp = urllib2.urlopen("https://127.0.0.1/anything/else").read()
-        assert "Netsink" in resp
-        if not x % FEEDBACK:
-            print ".",
-    print "[OK]"
+    rpts = 10000
+    runtest(dns, "dns lookups", rpts)
+    runtest(http, "http requests", rpts)
+    runtest(https, "https requests", rpts)
+    runtest(smtp, "smtp mail sends", rpts)
     
     
