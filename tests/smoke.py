@@ -23,6 +23,7 @@ import socket
 import urllib2
 
 from dnslib import DNSRecord, DNSQuestion
+import irc.client
 
 from netsink.config import Config
 import netsink.start as netsink
@@ -34,23 +35,23 @@ def runtest(testfunc, desc, repeats):
     print "+ %i %s (sequential)" % (repeats, desc),
     for x in range(repeats):
         testfunc()
-        if not x % (repeats / 10):
+        if not x % max(1, int(repeats / 10)):
             print ".",
     print "[OK]"
     
-def dns():
+def dnstest():
     resp = DNSRecord(q=DNSQuestion("google.com")).send("127.0.0.1")
     assert str(resp.get_a().rdata) == LOCALADDR
 
-def http():
+def httptest():
     resp = urllib2.urlopen("http://127.0.0.1/anything").read()
     assert "Netsink" in resp
 
-def https():
+def httpstest():
     resp = urllib2.urlopen("https://127.0.0.1/anything/else").read()
     assert "Netsink" in resp
 
-def smtp():
+def smtptest():
     msg = MIMEText('Message Body')
     msg['To'] = email.utils.formataddr(('Recipient', 'netsink@example.com'))
     msg['From'] = email.utils.formataddr(('Author', 'test@example.com'))
@@ -63,16 +64,27 @@ def smtp():
                         msg.as_string())
     finally:
         server.quit()
-        
+
+def irctest():
+    client = irc.client.IRC()
+    server = client.server().connect("127.0.0.1", 6667, "netsink")
+    server.join("#testchan", key="12345")
+    server.privmsg("#testchan", "ready for tasking")
+    # drain response messages
+    for x in range(6):
+        client.process_once(0.015)
+    server.close()    
+    
+    
 if __name__ == '__main__':
     print "Netsink smoke test"
     print "------------------"
     netsink.startlisteners(Config())
     
-    rpts = 10000
-    runtest(dns, "dns lookups", rpts)
-    runtest(http, "http requests", rpts)
-    runtest(https, "https requests", rpts)
-    runtest(smtp, "smtp mail sends", rpts)
+    runtest(dnstest, "dns lookups", 10000)
+    runtest(httptest, "http requests", 10000)
+    runtest(httpstest, "https requests", 10000)
+    runtest(smtptest, "smtp mail sends", 10000)
+    runtest(irctest, "irc sessions", 1000)
     
     

@@ -18,9 +18,11 @@
 from netsink.modules.dns import DNSHandler
 from netsink.modules.http import HTTPHandler
 from netsink.modules.smtp import SMTPHandler
+from netsink.modules.ircserver import IRCHandler
 
 # Mapping of known module names -> Handler class
 registry = {'dns': DNSHandler,
             'http': HTTPHandler,
             'smtp': SMTPHandler,
+            'irc': IRCHandler,
             }
