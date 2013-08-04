@@ -15,14 +15,23 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # TODO dynamic importing and allow user extensions, etc.
-from netsink.modules.dns import DNSHandler
+
 from netsink.modules.http import HTTPHandler
 from netsink.modules.smtp import SMTPHandler
-from netsink.modules.ircserver import IRCHandler
+
 
 # Mapping of known module names -> Handler class
-registry = {'dns': DNSHandler,
-            'http': HTTPHandler,
+registry = {'http': HTTPHandler,
             'smtp': SMTPHandler,
-            'irc': IRCHandler,
             }
+try:
+    from netsink.modules.dns import DNSHandler
+    registry['dns'] = DNSHandler
+except ImportError:
+    pass
+
+try:
+    from netsink.modules.ircserver import IRCHandler
+    registry['irc'] = IRCHandler
+except ImportError:
+    pass
