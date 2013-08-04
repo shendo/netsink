@@ -40,6 +40,7 @@ class Config:
         
         self.certfile = parser.get('netsink', 'certfile')
         self.keyfile = parser.get('netsink', 'keyfile')
+        self.redirection = parser.get('netsink', 'redirection').lower() in ["yes", "true"]
         self.listeners = {}
         for x in parser.get('netsink', 'listeners').split(","):
             listener = namedtuple('listener', 'name ports module socktype config servers')

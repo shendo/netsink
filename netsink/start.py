@@ -22,9 +22,10 @@ import sys
 import threading
 import time
 
-from netsink.config import Config
+from netsink.config import Config, ModuleConfig
 from netsink.listener import Listener
 from netsink.modules import registry
+from netsink.redirection import Redirector
 
 log = logging.getLogger("netsink")
 
@@ -58,7 +59,31 @@ def startlisteners(config):
         if x.ports:
             log.info("Listener '%s' awaiting %s activity on port/s %s", 
                          x.name, x.socktype, str(x.ports))
+    return config.listeners.values()
 
+def redirection(config, listeners):
+    """Setup port forwarding and redirection for the given listeners/config.
+    """
+    if not Redirector.available():
+        log.warn("Connection redirection enabled but not available. "
+                     "Ensure 'iptables' is installed and current user has sufficient privileges.")
+        return
+    
+    redir = Redirector()
+    # pass through all listener ports
+    for listener in [ x for x in listeners if x.socktype in ['SSL', 'TCP'] ]:
+        redir.add_forwarding("tcp", listener.ports)
+    # pass through any explicitly excluded ports
+    exclusions = config.cfg.get("redirection", "port_exclusions")
+    if exclusions:
+        redir.add_forwarding("tcp", exclusions.split(","))
+    # forward all other ports to generic listener
+    generic = config.cfg.get("redirection", "port_forwarding")
+    if generic:
+        redir.add_forwarding("tcp", outport=generic)
+    # forward all protocols to local address
+    redir.add_forwarding()
+    
 def wait():
     """Block indefinitely until Ctrl-C.
     """
@@ -74,7 +99,9 @@ def main():
     """
     initlogging()
     log.setLevel(logging.DEBUG)
-    startlisteners(Config())
+    l = startlisteners(Config())
+    if Config().redirection:
+        redirection(ModuleConfig("redirection.conf"), l)
     wait()
     
 if __name__ == '__main__':
