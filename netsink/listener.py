@@ -35,15 +35,15 @@ class Listener(object):
         
         globalconf = Config()
         if socktype.upper() == 'UDP':
-            self.server = SocketServer.UDPServer(('', port), handler)
+            self.server = SocketServer.ThreadingUDPServer(('', port), handler)
         elif socktype.upper() == 'TCP':
-            self.server = SocketServer.TCPServer(('', port), handler)
+            self.server = SocketServer.ThreadingTCPServer(('', port), handler)
         elif socktype.upper() == 'SSL':
             if not get_data_file(globalconf.certfile) or not get_data_file(globalconf.keyfile):
                 log.warn("Cannot find certfile: %s or keyfile: %s for ssl", 
                          globalconf.certfile, globalconf.keyfile)
             else:
-                self.server = SocketServer.TCPServer(('', port), handler)
+                self.server = SocketServer.ThreadingTCPServer(('', port), handler)
                 self.server.socket = ssl.wrap_socket(self.server.socket, 
                                                 keyfile=get_data_file(globalconf.keyfile), 
                                                 certfile=get_data_file(globalconf.certfile), 

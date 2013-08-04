@@ -71,7 +71,7 @@ def irctest():
     server.join("#testchan", key="12345")
     server.privmsg("#testchan", "ready for tasking")
     # drain response messages
-    for x in range(6):
+    for _ in range(6):
         client.process_once(0.015)
     server.close()    
     
