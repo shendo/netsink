@@ -27,6 +27,9 @@ from netsink.listener import StreamHandler
 class HTTPHandler(StreamHandler):
     """Basic HTTP support.  Serves up static content as specified in conf file.
     """
+    @staticmethod
+    def match(data):
+        return re.match(r'(GET|POST|PUT|DELETE|HEAD|OPTIONS|CONNECT|TRACE) \S+ HTTP/1\.[01]\r\n', data)
     
     def config(self, config):
         self. responses = []

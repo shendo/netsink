@@ -18,11 +18,14 @@
 
 from netsink.modules.http import HTTPHandler
 from netsink.modules.smtp import SMTPHandler
-
+from netsink.modules.multi import Dispatcher
+from netsink.modules.sslwrap import SSLHandler
 
 # Mapping of known module names -> Handler class
 registry = {'http': HTTPHandler,
             'smtp': SMTPHandler,
+            'ssl': SSLHandler,
+            'dispatcher': Dispatcher,
             }
 try:
     from netsink.modules.dns import DNSHandler

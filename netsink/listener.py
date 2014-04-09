@@ -173,3 +173,6 @@ class StreamHandler(SocketServer.StreamRequestHandler):
         self.wfile = iowrap.wfile
         SocketServer.StreamRequestHandler.finish(self)
         
+    @staticmethod
+    def match(pkt):
+        return False

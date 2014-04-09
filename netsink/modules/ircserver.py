@@ -25,7 +25,10 @@ class IRCHandler(irclib.IRCClient):
     Should at least capture initial client connection and any channel joining, 
     nick setting, etc.
     """
-        
+    @staticmethod
+    def match(self):
+        return False
+    
     def setup(self):
         """Setup the newly created client connection ready for handler.
         """
