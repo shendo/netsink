@@ -19,7 +19,7 @@ import logging
 import socket
 import subprocess
 
-log = logging.getLogger("netsink.redirection")
+log = logging.getLogger(__name__)
 
 class Redirector(object):
     """Uses iptables for setting up DNAT connection/port forwarding rules.
@@ -42,7 +42,7 @@ class Redirector(object):
         try:
             subprocess.check_call("iptables -L".split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             return True
-        except subprocess.CalledProcessError:
+        except (subprocess.CalledProcessError, WindowsError):
             return False
             
     def add_forwarding(self, protocol=None, inports=[], outport=None):
