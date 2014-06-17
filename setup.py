@@ -37,7 +37,7 @@ setup(
           },
     include_package_data=True,
     license="GPL",
-    install_requires = ['dnslib>=0.8'],
+    install_requires = ['dnslib>=0.8, <0.9'],
     classifiers = [
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
