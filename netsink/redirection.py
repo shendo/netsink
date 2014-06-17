@@ -40,11 +40,26 @@ class Redirector(object):
         false otherwise.
         """
         try:
-            subprocess.check_call("iptables -L".split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            subprocess.check_call("iptables -L".split())
             return True
         except (subprocess.CalledProcessError, WindowsError):
             return False
-            
+    
+    @staticmethod
+    def existing_rules():
+        """Returns true if there are existing iptables rules which may cause
+        conflict with the connection redirection/forwarding, false otherwise.
+        """
+        try:
+            stdout, _ = subprocess.Popen("iptables -L".split(), 
+                            stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+            for x in stdout.splitlines():
+                if x and not x.startswith('Chain') and not x.startswith('target'):
+                    return True
+        except (subprocess.CalledProcessError, WindowsError):
+            pass # fall through
+        return False
+        
     def add_forwarding(self, protocol=None, inports=[], outport=None):
         """Attempt to add a forwarding rule for the specified connection details.
         """ 

@@ -69,6 +69,10 @@ def redirection(config, listeners):
                      "Ensure 'iptables' is installed and current user has sufficient privileges.")
         return
     
+    if Redirector.existing_rules():
+        log.warn("Existing rules found in iptables. Not enabling connection redirection in case of conflict.")
+        return
+    
     redir = Redirector()
     # pass through all listener ports
     for listener in [ x for x in listeners if x.socktype in ['SSL', 'TCP'] ]:
