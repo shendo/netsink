@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # Netsink - Network Sinkhole for Isolated Malware Analysis
-# Copyright (C) 2013 Steve Henderson
+# Copyright (C) 2014 Steve Henderson
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -86,5 +86,4 @@ if __name__ == '__main__':
     runtest(httpstest, "https requests", 10000)
     runtest(smtptest, "smtp mail sends", 10000)
     runtest(irctest, "irc sessions", 1000)
-    
-    
+
