@@ -37,10 +37,10 @@ setup(
           },
     include_package_data=True,
     license="GPL",
-    install_requires = ['dnslib>=0.8, <0.9'],
+    install_requires = open('requirements.txt').readlines(),
     tests_require = ['pytest>=2.5'],
     classifiers = [
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'Intended Audience :: System Administrators',
         'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
