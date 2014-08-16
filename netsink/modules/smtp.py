@@ -1,5 +1,5 @@
 # Netsink - Network Sinkhole for Isolated Malware Analysis
-# Copyright (C) 2013 Steve Henderson
+# Copyright (C) 2014 Steve Henderson
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@ from smtpd import SMTPChannel
 import socket
 
 from netsink.listener import StreamHandler
-
+from netsink.version import __version__
 
 class SMTPHandler(StreamHandler, SMTPChannel):
     """Fake SMTP server.  Simply accepts any incoming mail 
@@ -27,6 +27,7 @@ class SMTPHandler(StreamHandler, SMTPChannel):
     Reuses python's smtpd library's SMTPChannel but overrides
     the socket interaction to conform to the StreamHandler API.
     """
+    version = __version__
     
     def channel_init(self):
         """Initialises the SMTPChannel structures.

@@ -1,5 +1,5 @@
 # Netsink - Network Sinkhole for Isolated Malware Analysis
-# Copyright (C) 2013 Steve Henderson
+# Copyright (C) 2014 Steve Henderson
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,10 +23,13 @@ import re
 
 from netsink import get_data_file
 from netsink.listener import StreamHandler
+from netsink.version import __version__
 
 class HTTPHandler(StreamHandler):
     """Basic HTTP support.  Serves up static content as specified in conf file.
     """
+    version = __version__
+    
     @staticmethod
     def match(data):
         return re.match(r'(GET|POST|PUT|DELETE|HEAD|OPTIONS|CONNECT|TRACE) \S+ HTTP/1\.[01]\r\n', data)

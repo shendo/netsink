@@ -1,5 +1,5 @@
 # Netsink - Network Sinkhole for Isolated Malware Analysis
-# Copyright (C) 2013 Steve Henderson
+# Copyright (C) 2014 Steve Henderson
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,12 +22,14 @@ import socket
 from dnslib import DNSRecord, QTYPE
 
 from netsink.listener import UDPHandler
+from netsink.version import __version__
 
 log = logging.getLogger(__name__)
 
 class DNSHandler(UDPHandler):
     """Basic DNS server.  Answers returned as specified in conf file.
     """
+    version = __version__
     
     def config(self, config):
         self.responses = []

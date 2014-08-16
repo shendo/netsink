@@ -1,5 +1,5 @@
 # Netsink - Network Sinkhole for Isolated Malware Analysis
-# Copyright (C) 2013 Steve Henderson
+# Copyright (C) 2014 Steve Henderson
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,10 +20,12 @@ import time
 
 from netsink.config import ModuleConfig
 from netsink.listener import StreamHandler
+from netsink.version import __version__
 
 log = logging.getLogger(__name__)
 
 class Dispatcher(StreamHandler):
+    version = __version__
     handlers = []
     
     def config(self, config):

@@ -1,5 +1,5 @@
 # Netsink - Network Sinkhole for Isolated Malware Analysis
-# Copyright (C) 2013 Steve Henderson
+# Copyright (C) 2014 Steve Henderson
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,27 +14,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# TODO dynamic importing and allow user extensions, etc.
-
-from netsink.modules.http import HTTPHandler
-from netsink.modules.smtp import SMTPHandler
-from netsink.modules.multi import Dispatcher
-from netsink.modules.sslwrap import SSLHandler
+import pkg_resources
 
 # Mapping of known module names -> Handler class
-registry = {'http': HTTPHandler,
-            'smtp': SMTPHandler,
-            'ssl': SSLHandler,
-            'dispatcher': Dispatcher,
-            }
-try:
-    from netsink.modules.dns import DNSHandler
-    registry['dns'] = DNSHandler
-except ImportError:
-    pass
-
-try:
-    from netsink.modules.ircserver import IRCHandler
-    registry['irc'] = IRCHandler
-except ImportError:
-    pass
+registry = {}
+for modules in pkg_resources.iter_entry_points(group='netsink.modules'):
+    registry[modules.name] = modules.load()

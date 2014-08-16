@@ -122,6 +122,9 @@ class IOWrapper(object):
 class UDPHandler(SocketServer.DatagramRequestHandler):
     """UDP base handler class
     """
+    # default version for modules that subclass
+    version = '0.1'
+    
     def setup(self):
         """Called when a new datagram arrives.
         Wraps the I/O objects for logging.
@@ -150,6 +153,9 @@ class UDPHandler(SocketServer.DatagramRequestHandler):
 class StreamHandler(SocketServer.StreamRequestHandler):
     """TCP/SSL base handler class
     """
+    # default version for modules that subclass
+    version = '0.1'
+    
     def setup(self):
         """Called when a new connection is established.
         Wraps the I/O objects for logging.

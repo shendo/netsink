@@ -33,7 +33,13 @@ setup(
     url="https://github.com/shendo/netsink",
     description="Network Sinkhole for Isolated Malware Analysis",
     long_description=open('README.rst').read(),
-    entry_points={"console_scripts": ['netsink = netsink.start:main']
+    entry_points={"console_scripts": ['netsink = netsink.start:main'],
+                  "netsink.modules": ['dns = netsink.modules.dns:DNSHandler',
+                                      'http = netsink.modules.http:HTTPHandler',
+                                      'irc = netsink.modules.ircserver:IRCHandler',
+                                      'dispatcher = netsink.modules.multi:Dispatcher',
+                                      'smtp = netsink.modules.smtp:SMTPHandler',
+                                      'ssl = netsink.modules.sslwrap:SSLHandler']
           },
     include_package_data=True,
     license="GPL",

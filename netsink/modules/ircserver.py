@@ -1,5 +1,5 @@
 # Netsink - Network Sinkhole for Isolated Malware Analysis
-# Copyright (C) 2013 Steve Henderson
+# Copyright (C) 2014 Steve Henderson
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,6 +18,8 @@ import socket
 
 import irc.server as irclib
 
+from netsink.version import __version__
+
 irclib.log = logging.getLogger(__name__) # use our own log namespace
 
 class IRCHandler(irclib.IRCClient):
@@ -25,6 +27,8 @@ class IRCHandler(irclib.IRCClient):
     Should at least capture initial client connection and any channel joining, 
     nick setting, etc.
     """
+    version = __version__
+    
     @staticmethod
     def match(self):
         return False
