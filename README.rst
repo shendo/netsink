@@ -68,8 +68,8 @@ Goals
 The primary project goals are:
 
 * Provide malware with communication end points to assist execution and elicit network traffic.
-* Straight-forward installation/deployment.  Should work out-of-the-box for most scenarios.
-* Easy configuration and extension.  Adding custom port ranges and services should be as simple as possible.
+* Straight-forward installation.  Should work out-of-the-box, with minimal configuration, for most scenarios.
+* Easy configuration and extension.  Adding custom services and response handling should be as simple as possible.
 
 Features
 --------
@@ -78,13 +78,18 @@ This project is still in early development, as such the feature set is limited.
 
 * DNS redirection based on simple config file
 * HTTP/HTTPS serving of static files based on url regexes
+* IRC service to capture connect and channel joins, etc.
+* Basic SMTP server support (no auth support yet)
 * Listening port ranges easily configurable and separate from the modules that handle the traffic. 
+* Automatic connection redirection for platforms that support ``iptables``
+* Generic port listener that can dispatch to other modules via packet inspection
 
 Planned Additions:
 
 * Internal DHCP server to auto configure clients
-* Automatic connection redirection for platforms that support ``iptables``
-* Expand available fake services to include IRC, SMTP, FTP, etc.
+* Expand available fake services to include FTP, etc.
+* SMTP Authentication support
+* HTTP/S response switching based on requested host/server not just URL pattern
 * Better documentation
 
 Issues
