@@ -42,7 +42,7 @@ class Redirector(object):
         try:
             subprocess.check_call("iptables -L".split())
             return True
-        except (subprocess.CalledProcessError, WindowsError):
+        except (subprocess.CalledProcessError, OSError):
             return False
     
     @staticmethod
@@ -56,7 +56,7 @@ class Redirector(object):
             for x in stdout.splitlines():
                 if x and not x.startswith('Chain') and not x.startswith('target'):
                     return True
-        except (subprocess.CalledProcessError, WindowsError):
+        except (subprocess.CalledProcessError, OSError):
             pass # fall through
         return False
         
