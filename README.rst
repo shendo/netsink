@@ -43,7 +43,8 @@ on the ``netsink`` host.  This can be achieved in several ways.
 ``netsink`` includes a DNS server that will advertise
 itself as the destination for any client DNS requests (or as otherwise configured).  
 Change the client's network interface to use the ``netsink`` host's address as its 
-DNS server.
+DNS server.  Also set the Default Gateway to the ``netsink`` host if using ``iptables``
+redirection, to capture direct IP address communication attempts.
 
 **DHCP Configuration**  
 
