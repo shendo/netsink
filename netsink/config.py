@@ -21,6 +21,7 @@ from pkg_resources import DistributionNotFound, Requirement, ResourceManager
 
 # path to conf files if package not installed
 SOURCE_PATH = os.path.join(os.path.dirname(__file__), 'conf')
+OVERRIDE_PATH = "/etc/netsink"
 
 def installed_location(filename):
     """Returns the full path for the given installed file or None if not found.
@@ -36,7 +37,9 @@ class Config:
     def __init__(self, cfg='netsink.conf'):
         installed_path = installed_location(cfg) or 'notfound'
         parser = ConfigParser()
-        parser.read([installed_path, os.path.join(SOURCE_PATH, cfg)])
+        parser.read([os.path.join(OVERRIDE_PATH),
+                     installed_path,
+                     os.path.join(SOURCE_PATH, cfg)])
         
         self.certfile = parser.get('netsink', 'certfile')
         self.keyfile = parser.get('netsink', 'keyfile')
@@ -58,5 +61,7 @@ class ModuleConfig:
     def __init__(self, cfg):
         installed_path = installed_location(cfg) or 'notfound'
         parser = ConfigParser()
-        parser.read([installed_path, os.path.join(SOURCE_PATH, cfg)])
+        parser.read([os.path.join(OVERRIDE_PATH),
+                     installed_path,
+                     os.path.join(SOURCE_PATH, cfg)])
         self.cfg = parser
