@@ -3,6 +3,8 @@ netsink
 
 Network sinkhole for isolated malware analysis.
 
+|build_status| |pypi_version|
+
 Overview
 --------
 
@@ -93,3 +95,12 @@ requests can be made using GitHub's `issues system`_.
 
 .. _GitHub: https://github.com/shendo/netsink
 .. _issues system: https://github.com/shendo/netsink/issues
+
+.. |build_status| image:: https://secure.travis-ci.org/shendo/netsink.png?branch=master
+   :target: https://travis-ci.org/shendo/netsink
+   :alt: Current build status
+
+.. |pypi_version| image:: https://pypip.in/v/netsink/badge.png
+   :target: https://pypi.python.org/pypi/netsink
+   :alt: Latest PyPI version
+

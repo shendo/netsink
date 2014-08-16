@@ -38,6 +38,7 @@ setup(
     include_package_data=True,
     license="GPL",
     install_requires = ['dnslib>=0.8, <0.9'],
+    tests_require = ['pytest>=2.5'],
     classifiers = [
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
