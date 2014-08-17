@@ -59,19 +59,23 @@ class HTTPHandler(StreamHandler):
                 break
         
         # read (and ignore) any body
-        m = re.match("Content-Length: (?P<length>\d+)", data)
+        m = re.search("Content-Length: (?P<length>\d+)\r\n", data)
         if m:
             self.rfile.read(int(m.group('length')))
         # handle request
+        host = ""
+        m = re.search(r"Host: (?P<host>[0-9a-zA-Z\-\.\:]+)\r\n", data)
+        if m:
+            host = m.group('host').lower() # normalise
         m = re.match(r"^(?P<method>\w+) (?P<path>\S+) (?P<version>HTTP/\d\.\d)\r\n", data)
         if m:
-            self.handlepath(m.group('method'), m.group('path'))
+            self.handlepath(host, m.group('method'), m.group('path'))
             
-    def handlepath(self, method, path):
+    def handlepath(self, host, method, path):
         """Search config patterns to find an appropriate file/response to return.
         """
         for x in self.responses:
-            m = re.match(x.pattern, path)
+            m = re.match(x.pattern, host + path)
             if m:
                 data = ""
                 if x.file and x.file != "None":

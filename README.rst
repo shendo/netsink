@@ -79,6 +79,7 @@ This project is still in early development, as such the feature set is limited.
 
 * DNS redirection based on simple config file
 * HTTP/HTTPS serving of static files based on url regexes
+* Imitate known external IP address lookup sites (thanks to `ipgetter`_ for the compiled list)
 * IRC service to capture connect and channel joins, etc.
 * Basic SMTP server support (no auth support yet)
 * Listening port ranges easily configurable and separate from the modules that handle the traffic. 
@@ -90,7 +91,7 @@ Planned Additions:
 * Internal DHCP server to auto configure clients
 * Expand available fake services to include FTP, etc.
 * SMTP Authentication support
-* HTTP/S response switching based on requested host/server not just URL pattern
+* Pluggable fake C2 servers
 * Better documentation
 
 Issues
@@ -101,6 +102,7 @@ requests can be made using GitHub's `issues system`_.
 
 .. _GitHub: https://github.com/shendo/netsink
 .. _issues system: https://github.com/shendo/netsink/issues
+.. _ipgetter: https://github.com/phoemur/ipgetter
 
 .. |build_status| image:: https://secure.travis-ci.org/shendo/netsink.png?branch=master
    :target: https://travis-ci.org/shendo/netsink
