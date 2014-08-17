@@ -59,7 +59,7 @@ class PeekableSSLSocket(ssl.SSLSocket):
         ssl.SSLSocket.__init__(self, sock, keyfile, certfile, 
                                server_side, cert_reqs, ssl_version, 
                                ca_certs, do_handshake_on_connect, 
-                               suppress_ragged_eofs, ciphers)
+                               suppress_ragged_eofs)
         self.peekbuff = ''
         
     def read(self, size=1024, peek=False):
