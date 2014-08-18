@@ -14,11 +14,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import base64
+import logging
 from smtpd import SMTPChannel
 import socket
 
 from netsink.listener import StreamHandler
 from netsink.version import __version__
+
+# ascii protocol so must comms will be logged fine already
+# just add decoding of auth logins, etc. for convenience
+log = logging.getLogger(__name__)
 
 class SMTPHandler(StreamHandler, SMTPChannel):
     """Fake SMTP server.  Simply accepts any incoming mail 
@@ -67,6 +73,60 @@ class SMTPHandler(StreamHandler, SMTPChannel):
                 self.collect_incoming_data(line[:-len(self.get_terminator())])
                 self.found_terminator()
                 line = ""
+                
+    def smtp_EHLO(self, arg):
+        if not arg:
+            self.push('501 Syntax: EHLO hostname')
+            return
+        if self._SMTPChannel__greeting:
+            self.push('503 Duplicate HELO/EHLO')
+        else:
+            self._SMTPChannel__greeting = arg
+            self.push('250-{0} Hello {1}'.format(self._SMTPChannel__fqdn, arg))
+            self.push('250-8BITMIME')
+            self.push('250-AUTH LOGIN PLAIN')
+            self.push('250 STARTTLS')
+    
+    def smtp_AUTH(self, arg):
+        if arg == 'LOGIN':
+            # prompt for username
+            self.push('334 VXNlcm5hbWU6')
+            data = self.rfile.readline()
+            if not data: 
+                return
+            log.info("LOGIN AUTH Username: {0}" \
+                     .format(base64.decodestring(data.strip())))
+        if arg.startswith('LOGIN'):
+            # Username was included in LOGIN line
+            if ' ' in arg:
+                data = arg.split(' ')[1]
+                log.info("LOGIN AUTH Username: {0}" \
+                     .format(base64.decodestring(data.strip())))
+
+            # prompt for password
+            self.push('334 UGFzc3dvcmQ6')
+            data = self.rfile.readline()
+            if not data: 
+                return
+            log.info("LOGIN AUTH Password: {0}" \
+                     .format(base64.decodestring(data.strip())))
+            self.push('235 Authentication succeeded')
+        elif arg.startswith('PLAIN') and ' ' in arg:
+            data = arg.split(' ')[1]
+            # plain is null separated user:pass base64 encoded
+            log.info("PLAIN AUTH Uername/Password: {0}" \
+                 .format(" ".join(base64.decodestring(data.strip()).split('\0'))))
+
+            # we'll accept anyone
+            self.push('235 Authentication succeeded')
+        else:
+            self.push('504 Unrecognized authentication type.')
+        
+    def smtp_STARTTLS(self, arg):
+        if arg:
+            self.push('501 Syntax: STARTTLS')
+        else:
+            self.push('220 Ready to start TLS')
             
     def push(self, data):
         """Override the SMTPChannel's method to use the StreamHandler's
