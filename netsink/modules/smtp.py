@@ -88,20 +88,19 @@ class SMTPHandler(StreamHandler, SMTPChannel):
             self.push('250 STARTTLS')
     
     def smtp_AUTH(self, arg):
+        data = ""
         if arg == 'LOGIN':
             # prompt for username
             self.push('334 VXNlcm5hbWU6')
             data = self.rfile.readline()
             if not data: 
                 return
-            log.info("LOGIN AUTH Username: {0}" \
-                     .format(base64.decodestring(data.strip())))
         if arg.startswith('LOGIN'):
             # Username was included in LOGIN line
             if ' ' in arg:
                 data = arg.split(' ')[1]
-                log.info("LOGIN AUTH Username: {0}" \
-                     .format(base64.decodestring(data.strip())))
+            log.info("LOGIN AUTH Username: {0}" \
+                 .format(base64.decodestring(data.strip())))
 
             # prompt for password
             self.push('334 UGFzc3dvcmQ6')
@@ -115,7 +114,7 @@ class SMTPHandler(StreamHandler, SMTPChannel):
             data = arg.split(' ')[1]
             # plain is null separated user:pass base64 encoded
             log.info("PLAIN AUTH Uername/Password: {0}" \
-                 .format(" ".join(base64.decodestring(data.strip()).split('\0'))))
+                 .format(base64.decodestring(data.strip()).replace('\0', ' ')))
 
             # we'll accept anyone
             self.push('235 Authentication succeeded')

@@ -21,7 +21,7 @@ def test_smtp():
                         ['netsink@example.com'], 
                         msg.as_string())
     client.quit()
-    
+
 def test_smtp_auth_plain():
     server = SocketServer.TCPServer(('', 0), smtp.SMTPHandler)
     server.cfg = ModuleConfig('smtp.conf').cfg
@@ -58,7 +58,5 @@ def test_smtp_auth_login():
                         ['netsink@example.com'], 
                         msg.as_string())
     client.quit()
-    
-                   
-    
+
     
