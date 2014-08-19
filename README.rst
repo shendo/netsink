@@ -75,13 +75,11 @@ The primary project goals are:
 Features
 --------
 
-This project is still in early development, as such the feature set is limited.
-
 * DNS redirection based on simple config file
 * HTTP/HTTPS serving of static files based on url regexes
 * Imitate known external IP address lookup sites (thanks to `ipgetter`_ for the compiled list)
 * IRC service to capture connect and channel joins, etc.
-* Basic SMTP server support (no auth support yet)
+* SMTP/ESMTP server including AUTH and STARTTLS support
 * Listening port ranges easily configurable and separate from the modules that handle the traffic. 
 * Automatic connection redirection for platforms that support ``iptables``
 * Generic port listener that can dispatch to other modules via packet inspection
@@ -90,7 +88,6 @@ Planned Additions:
 
 * Internal DHCP server to auto configure clients
 * Expand available fake services to include FTP, etc.
-* SMTP Authentication support
 * Pluggable fake C2 servers
 * Better documentation
 

@@ -168,7 +168,30 @@ class StreamHandler(SocketServer.StreamRequestHandler):
         self.rfile = iowrap
         self.wfile = iowrap
         self.config(self.server.cfg)
-            
+    
+    def starttls(self):
+        """Upgrade the transport used by this handler
+        to ssl/tls.  As socket will already be connected
+        this will trigger a handshake with the client endpoint.
+        """
+        globalconf = Config()
+        self.connection = ssl.wrap_socket(self.connection,
+                                keyfile=get_data_file(globalconf.keyfile),
+                                certfile=get_data_file(globalconf.certfile),
+                                server_side=True)
+        # flush and recreate the rfile/wfile handles
+        iowrap = self.rfile
+        iowrap.logread()
+        iowrap.logwrite()
+        self.rfile = self.connection.makefile('rb', self.rbufsize)
+        self.wfile = self.connection.makefile('wb', self.wbufsize)
+        iowrap = IOWrapper(self.client_address, 
+                           self.server.server_address, 
+                           self.rfile, 
+                           self.wfile)
+        self.rfile = iowrap
+        self.wfile = iowrap
+
     def finish(self):
         """Called after the connection has closed to finalise any resources.
         """

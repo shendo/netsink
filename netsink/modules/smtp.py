@@ -22,7 +22,7 @@ import socket
 from netsink.listener import StreamHandler
 from netsink.version import __version__
 
-# ascii protocol so must comms will be logged fine already
+# ascii protocol so most comms will be logged fine already
 # just add decoding of auth logins, etc. for convenience
 log = logging.getLogger(__name__)
 
@@ -126,7 +126,10 @@ class SMTPHandler(StreamHandler, SMTPChannel):
             self.push('501 Syntax: STARTTLS')
         else:
             self.push('220 Ready to start TLS')
-            
+            self.starttls()
+            # discard any previous state
+            self.channel_init()
+
     def push(self, data):
         """Override the SMTPChannel's method to use the StreamHandler's
         supplied file handle for writing.
