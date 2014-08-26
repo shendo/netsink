@@ -22,7 +22,7 @@ import sys
 import threading
 import time
 
-from netsink.config import Config, ModuleConfig
+from netsink.config import Config, ModuleConfig, parseints
 from netsink.listener import Listener
 from netsink.modules import registry
 from netsink.redirection import Redirector
@@ -78,9 +78,9 @@ def redirection(config, listeners):
     for listener in [ x for x in listeners if x.socktype in ['SSL', 'TCP'] ]:
         redir.add_forwarding("tcp", listener.ports)
     # pass through any explicitly excluded ports
-    exclusions = config.cfg.get("redirection", "port_exclusions")
+    exclusions = list(parseints(config.cfg.get("redirection", "port_exclusions")))
     if exclusions:
-        redir.add_forwarding("tcp", exclusions.split(","))
+        redir.add_forwarding("tcp", exclusions)
     # forward all other ports to generic listener
     generic = config.cfg.get("redirection", "port_forwarding")
     if generic:

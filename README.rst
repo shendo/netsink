@@ -80,6 +80,7 @@ Features
 * Imitate known external IP address lookup sites (thanks to `ipgetter`_ for the compiled list)
 * IRC service to capture connect and channel joins, etc.
 * SMTP/ESMTP server including AUTH and STARTTLS support
+* FTP server support
 * Listening port ranges easily configurable and separate from the modules that handle the traffic. 
 * Automatic connection redirection for platforms that support ``iptables``
 * Generic port listener that can dispatch to other modules via packet inspection
@@ -87,7 +88,7 @@ Features
 Planned Additions:
 
 * Internal DHCP server to auto configure clients
-* Expand available fake services to include FTP, etc.
+* Expand available fake services to include POP3, IMAP, TFTP, etc.
 * Pluggable fake C2 servers
 * Better documentation
 

@@ -39,7 +39,8 @@ setup(
                                       'irc = netsink.modules.ircserver:IRCHandler',
                                       'dispatcher = netsink.modules.multi:Dispatcher',
                                       'smtp = netsink.modules.smtp:SMTPHandler',
-                                      'ssl = netsink.modules.sslwrap:SSLHandler']
+                                      'ssl = netsink.modules.sslwrap:SSLHandler',
+                                      'ftp = netsink.modules.ftp:FTPHandler']
           },
     include_package_data=True,
     license="GPL",

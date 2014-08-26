@@ -1,2 +1,3 @@
 dnslib>=0.8, <0.9
 irc>=8.0
+pyftpdlib>=1.4
