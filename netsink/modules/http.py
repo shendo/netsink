@@ -35,7 +35,7 @@ class HTTPHandler(StreamHandler):
         return re.match(r'(GET|POST|PUT|DELETE|HEAD|OPTIONS|CONNECT|TRACE) \S+ HTTP/1\.[01]\r\n', data)
     
     def config(self, config):
-        self. responses = []
+        self.responses = []
         for x in config.get('http', 'responses').split(","):
             resp = namedtuple('response', 'pattern status file')
             resp.name = x.strip()
