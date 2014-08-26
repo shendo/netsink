@@ -23,6 +23,22 @@ from pkg_resources import DistributionNotFound, Requirement, ResourceManager
 SOURCE_PATH = os.path.join(os.path.dirname(__file__), 'conf')
 OVERRIDE_PATH = "/etc/netsink"
 
+def parseints(val):
+    """Given a string list of comma separated integers, returns the ints in order.
+    Also handles range syntax such as 10-15.
+    No Attempt is made to dedupe or re-sort the elements.
+    @param val: String value to parse
+    @return: Yielded ints parsed from the string
+    @raise ValueError: Invalid token in string.
+    """
+    for x in val.split(','):
+        if '-' in x:
+            y, z = x.split('-')
+            for i in range(int(y.strip()), int(z.strip()) + 1):
+                yield i
+        elif x.strip() != '':
+            yield int(x.strip())
+    
 def installed_location(filename):
     """Returns the full path for the given installed file or None if not found.
     """
@@ -48,7 +64,7 @@ class Config:
         for x in parser.get('netsink', 'listeners').split(","):
             listener = namedtuple('listener', 'name ports module socktype config servers')
             listener.name = x.strip()
-            listener.ports = [int(p.strip()) for p in parser.get(listener.name, 'ports').split(",") ]
+            listener.ports = list(parseints(parser.get(listener.name, 'ports')))
             listener.module = parser.get(listener.name, 'module')
             listener.socktype = parser.get(listener.name, 'socktype')
             listener.config = parser.get(listener.name, 'config')
