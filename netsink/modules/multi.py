@@ -75,7 +75,7 @@ class Dispatcher(StreamHandler):
                 # do something more sensible here in future...
                 # maybe enumerate through known protocols/C2 that
                 # server side initiates conversation
-                self.connection.sendall("Hello from netsink?\n")
+                self.connection.sendall("220 Hello from netsink?\r\n")
             time.sleep(0.1)
         log.debug("Dispatcher closing socket to client %s", self.client_address)
             
