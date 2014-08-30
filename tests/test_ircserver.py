@@ -6,7 +6,7 @@ import irc.client
 from netsink.config import ModuleConfig
 from netsink.modules import ircserver
 
-def test_smtp():
+def test_irc():
     server = SocketServer.TCPServer(('', 0), ircserver.IRCHandler)
     server.cfg = ModuleConfig('irc.conf').cfg
     thread.start_new_thread(server.serve_forever, ())

@@ -26,6 +26,7 @@ log.logger = logger
 
 from pyftpdlib.authorizers import DummyAuthorizer
 from pyftpdlib.handlers import FTPHandler as PyFTPHandler
+from pyftpdlib.ioloop import IOLoop
     
 from netsink import get_data_file
 from netsink.config import parseints
@@ -81,7 +82,7 @@ class FTPHandler(StreamHandler):
     """FTP Handler that proxies to pyftpdlib.
     """
     version = __version__
-    
+
     def config(self, config):
         self.dirseed = config.get('ftp', 'dirseed')
         PyFTPHandler.banner = config.get('ftp', 'serverstring')
@@ -102,10 +103,12 @@ class FTPHandler(StreamHandler):
             ftproot = os.path.join(tmpdir, self.dirseed).decode('utf-8')
             shutil.copytree(get_data_file(self.dirseed), ftproot)
             # hand off control to their handler with its own async ioloop
-            handler = PyFTPHandler(self.request, self.server)
+            handler = PyFTPHandler(self.request, self.server, ioloop=IOLoop())
             handler.authorizer = PermissiveAuthorizer(ftproot)
             handler.handle()
             handler.ioloop.loop(1)
         finally:
+            if handler.ioloop:
+                handler.ioloop.close()
             if tmpdir:
                 shutil.rmtree(tmpdir)

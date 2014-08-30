@@ -13,6 +13,7 @@ def test_ftp_anonymous():
     client.connect('127.0.0.1', server.socket.getsockname()[1])
     client.login()
     assert 'README.txt' in client.nlst()
+    client.quit()
 
 def test_ftp_login():
     server = SocketServer.TCPServer(('', 0), ftp.FTPHandler)
@@ -22,6 +23,7 @@ def test_ftp_login():
     client.connect('127.0.0.1', server.socket.getsockname()[1])
     client.login('user1', 'mysecret')
     assert 'README.txt' in client.nlst()
+    client.quit()
 
 def test_ftp_download():
     server = SocketServer.TCPServer(('', 0), ftp.FTPHandler)
@@ -33,6 +35,7 @@ def test_ftp_download():
     def check_content(content):
         assert 'Nothing to see here' in content
     client.retrbinary('RETR README.txt', check_content)
+    client.quit()
         
 def test_ftp_upload():
     server = SocketServer.TCPServer(('', 0), ftp.FTPHandler)
@@ -43,3 +46,5 @@ def test_ftp_upload():
     client.login()
     with open(get_data_file("ftproot/README.txt")) as tmp:
         client.storbinary('STOR testing.txt', tmp)
+    client.quit()
+
