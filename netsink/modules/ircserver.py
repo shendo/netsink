@@ -1,5 +1,5 @@
 # Netsink - Network Sinkhole for Isolated Malware Analysis
-# Copyright (C) 2014 Steve Henderson
+# Copyright (C) 2013-2014 Steve Henderson
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -13,6 +13,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 import logging
 import socket
 
