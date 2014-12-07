@@ -20,11 +20,7 @@ import thread
 import urllib2
 
 from netsink.config import ModuleConfig
-from netsink.modules import multi, http, sslwrap, registry
-
-# registry won't be setup unless package installed
-registry['http'] = http.HTTPHandler
-registry['ssl'] = sslwrap.SSLHandler
+from netsink.modules import multi
 
 def test_dispatched_http():
     server = SocketServer.TCPServer(('', 0), multi.Dispatcher)
